@@ -1,0 +1,954 @@
+card_purificatori:
+  template: no_background
+  show_icon: false
+  styles:
+    card:
+      - height: 270px
+
+    custom_fields:
+      nome:
+        - position: absolute
+        - left: 160px
+        - top: 20px
+      fan:
+        - position: absolute
+        - left: 110px
+        - top: 75px
+
+      sx_dw:
+        - position: absolute
+        - left: 20px
+        - top: 147px
+
+      dx_dw:
+        - position: absolute
+        - left: 254px
+        - top: 147px
+
+      up:
+        - position: absolute
+        - left: 20px #254px
+        - top: 17px
+
+      notte_on:
+        - position: absolute
+        - left: 270px
+        - top: 24px
+      notte_off:
+        - position: absolute
+        - left: 380px
+        - top: 90px
+
+      bg1:
+        - position: absolute
+        - left: 170px
+        - top: 75px
+      bg2:
+        - position: absolute
+        - left: 170px
+        - top: 75px
+      bg3:
+        - position: absolute
+        - left: 170px
+        - top: 75px
+
+      cerchio:
+        - position: absolute
+        - left: 155px
+        - top: 60px
+
+      pm2:
+        - position: absolute
+        - left: 170px #25px
+        - top: 75px
+        - height: 145px
+        - width: 145px
+      pm2_b:
+        - position: absolute
+        - left: 180px #25px
+        - top: 85px
+        - height: 145px
+        - width: 145px
+
+      graph:
+        - position: absolute
+        - left: 185px
+        - top: 90px
+
+      auto:
+        - position: absolute
+        - left: 220px
+        - top: 88px
+
+      angolo_sx_up:
+        - position: absolute
+        - left: 5px
+        - top: 0px
+      angolo_sx_up_2:
+        - position: absolute
+        - left: 13px
+        - top: 8px
+      angolo_sx_up_3:
+        - position: absolute
+        - left: 15px
+        - top: 10px
+
+      angolo_sx_dw:
+        - position: absolute
+        - left: 5px
+        - top: 180px
+      angolo_sx_dw_2:
+        - position: absolute
+        - left: 13px
+        - top: 188px
+      angolo_sx_dw_3:
+        - position: absolute
+        - left: 15px
+        - top: 191px
+
+      angolo_dx_up:
+        - position: absolute
+        - left: 400px #25px
+        - top: 0px
+      angolo_dx_up_2:
+        - position: absolute
+        - left: 408px #25px
+        - top: 8px
+      angolo_dx_up_3:
+        - position: absolute
+        - left: 410px #25px
+        - top: 10px
+
+      angolo_dx_dw:
+        - position: absolute
+        - left: 400px #25px
+        - top: 180px
+      angolo_dx_dw_2:
+        - position: absolute
+        - left: 408px #25px
+        - top: 188px
+      angolo_dx_dw_3:
+        - position: absolute
+        - left: 410px #25px
+        - top: 191px
+
+      fan_switch:
+        - position: absolute
+        - left: 25px
+        - top: 20px
+
+      logo_aria:
+        - position: absolute
+        - left: 25px
+        - top: 200px
+      logo_aria2:
+        - position: absolute
+        - left: 30px
+        - top: 205px
+      logo_aria3:
+        - position: absolute
+        - left: 25px
+        - top: 200px
+      logo_aria4:
+        - position: absolute
+        - left: 25px
+        - top: 200px
+
+      impostazioni:
+        - position: absolute
+        - left: 420px
+        - top: 200px
+
+      notte:
+        - position: absolute
+        - left: 420px
+        - top: 20px
+
+#########################
+
+  custom_fields:
+
+    sx_dw:
+      card:
+        type: custom:button-card
+        name: Aria
+        label: |
+          [[[ return states['sensor.purificatore_aria_' + variables.nome].state ]]]
+        show_label: true
+        styles:
+          card:
+            - height: 108px
+            - width: 216px
+            - background-color: "#373737"
+            - border-top-left-radius: 2%
+            - border-top-right-radius: 0%
+            - border-bottom-left-radius: 0%
+            - border-bottom-right-radius: 0%
+            - border: "4px solid #4d4d4d"
+          name:
+            - font-size: 16px
+            - padding-left: 30px
+          label:
+            - padding-left: 30px
+            - font-size: 24px
+            - margin-top: -2%
+            - font-weight: bold
+
+    dx_dw:
+      card:
+        type: custom:button-card
+        name: Filtro
+        label: |
+          [[[ return states[variables.purificatore].attributes.filter_life + "%"]]]
+        show_label: true
+        styles:
+          card:
+            - height: 108px
+            - width: 216px
+            - background-color: "#373737"
+            - border-top-left-radius: 0%
+            - border-top-right-radius: 2%
+            - border-bottom-left-radius: 0%
+            - border-bottom-right-radius: 0%
+            - border: "4px solid #4d4d4d"
+          name:
+            - font-size: 16px
+            - padding-left: 0px
+          label:
+            - padding-left: 0px
+            - font-size: 24px
+            - margin-top: -2%
+            - font-weight: bold
+
+    up:
+      card:
+        type: custom:button-card
+        name: Modo
+        label: |
+          [[[
+            if (states['input_boolean.purificatore_' + variables.nome + '_modo_notte'].state == 'on') return "Notte";
+            else return "Giorno";
+          ]]]
+        show_label: false
+        styles:
+          card:
+            - height: 118px
+            - width: 450px
+            - background-color: "#373737"
+            - border-top-left-radius: 25%
+            - border-top-right-radius: 25%
+            - border-bottom-left-radius: 12%
+            - border-bottom-right-radius: 12%
+            - border-width: 4px 4px 4px 4px
+            - border-color: "#4d4d4d"
+          name:
+            - font-size: 16px
+            - margin-bottom: 2%
+          label:
+            - font-size: 24px
+            - font-weight: bold
+            - margin-top: -5%
+
+    cerchio:
+      card:
+        type: custom:button-card
+        show_icon: false
+        show_name: false
+        show_state: true
+        styles:
+          card:
+            - height: 180px
+            - width: 180px
+            - background-color: "333333"
+            - border-radius: 50%
+          state:
+            - padding-bottom: 15px
+            - font-size: 20px
+            - color: DimGray
+            - font-weight: bold
+
+    angolo_sx_up:
+      card:
+        type: custom:button-card
+        show_icon: false
+        show_name: false
+        show_state: true
+        styles:
+          card:
+            - height: 90px
+            - width: 90px
+            - border-radius: 35%
+            - background-color: none
+            - border: 0px
+          state:
+            - padding-bottom: 15px
+            - font-size: 20px
+            - color: DimGray
+            - font-weight: bold
+    angolo_sx_up_2:
+      card:
+        type: custom:button-card
+        show_icon: false
+        show_name: false
+        show_state: true
+        styles:
+          card:
+            - height: 75px
+            - width: 75px
+            - background-color: "#5a5a5a"
+            - border-radius: 35%
+    angolo_sx_up_3:
+      card:
+        type: custom:button-card
+        show_icon: false
+        show_name: false
+        show_state: true
+        styles:
+          card:
+            - height: 70px
+            - width: 70px
+            - background-color: "#2d2d2d"
+            - border-radius: 35%
+
+    angolo_sx_dw:
+      card:
+        type: custom:button-card
+        show_icon: false
+        show_name: false
+        show_state: true
+        styles:
+          card:
+            - height: 90px
+            - width: 90px
+            - background-color: none
+            - border: 0px
+            - border-radius: 35%
+    angolo_sx_dw_2:
+      card:
+        type: custom:button-card
+        show_icon: false
+        show_name: false
+        show_state: true
+        styles:
+          card:
+            - height: 75px
+            - width: 75px
+            - background-color: "#5a5a5a"
+            - border-radius: 35%
+    angolo_sx_dw_3:
+      card:
+        type: custom:button-card
+        show_icon: false
+        show_name: false
+        show_state: true
+        styles:
+          card:
+            - height: 70px
+            - width: 70px
+            - background-color: "#2d2d2d"
+            - border-radius: 35%
+
+    angolo_dx_up:
+      card:
+        type: custom:button-card
+        show_icon: false
+        show_name: false
+        show_state: true
+        styles:
+          card:
+            - height: 90px
+            - width: 90px
+            - background-color: none
+            - border: 0px
+            - border-radius: 35%
+    angolo_dx_up_2:
+      card:
+        type: custom:button-card
+        show_icon: false
+        show_name: false
+        show_state: true
+        styles:
+          card:
+            - height: 75px
+            - width: 75px
+            - background-color: "#5a5a5a"
+            - border-radius: 35%
+    angolo_dx_up_3:
+      card:
+        type: custom:button-card
+        show_icon: false
+        show_name: false
+        show_state: true
+        styles:
+          card:
+            - height: 70px
+            - width: 70px
+            - background-color: "#2d2d2d"
+            - border-radius: 35%
+
+    angolo_dx_dw:
+      card:
+        type: custom:button-card
+        show_icon: false
+        show_name: false
+        show_state: true
+        styles:
+          card:
+            - height: 90px
+            - width: 90px
+            - background-color: none
+            - border: 0px
+            - border-radius: 35%
+    angolo_dx_dw_2:
+      card:
+        type: custom:button-card
+        show_icon: false
+        show_name: false
+        show_state: true
+        styles:
+          card:
+            - height: 75px
+            - width: 75px
+            - background-color: "#5a5a5a"
+            - border-radius: 35%
+    angolo_dx_dw_3:
+      card:
+        type: custom:button-card
+        show_icon: false
+        show_name: false
+        show_state: true
+        styles:
+          card:
+            - height: 70px
+            - width: 70px
+            - background-color: "#2b2b2b"
+            - border-radius: 35%
+
+    bg1:
+      card:
+        type: custom:button-card
+        extra_styles: |
+          @keyframes spin {
+            from {transform:rotate(0deg);}
+            to {transform:rotate(360deg);}
+          }
+        styles:
+          card:
+            - height: 150px
+            - width: 150px
+            - border: none
+            - border-top-left-radius: 40%
+            - border-top-right-radius: 50%
+            - border-bottom-left-radius: 50%
+            - border-bottom-right-radius: 40%
+            - background: |
+                [[[
+                  if (states[variables.purificatore].state == 'on')
+                    return "#d7e3f6";
+                  return 'none';
+                ]]]
+            - animation: |
+                [[[
+                  if (states[variables.purificatore].state == 'off')
+                    return "spin 5s linear infinite";
+                  return "none";
+                ]]]
+    bg2:
+      card:
+        type: custom:button-card
+        extra_styles: |
+          @keyframes spin {
+            from {transform:rotate(0deg);}
+            to {transform:rotate(360deg);}
+          }
+        styles:
+          card:
+            - height: 150px
+            - width: 150px
+            - border: none
+            - border-top-left-radius: 40%
+            - border-top-right-radius: 40%
+            - border-bottom-left-radius: 40%
+            - border-bottom-right-radius: 40%
+            - background: |
+                [[[
+                  if (states[variables.purificatore].state == 'on')
+                    return "LightGray";
+                  return 'none';
+                ]]]
+            - animation: spin 5s linear infinite
+    bg3:
+      card:
+        type: custom:button-card
+        extra_styles: |
+          @keyframes spin {
+            from {transform:rotate(0deg);}
+            to {transform:rotate(360deg);}
+          }
+        styles:
+          card:
+            - height: 150px
+            - width: 150px
+            - border: none
+            - border-top-left-radius: 40%
+            - border-top-right-radius: 50%
+            - border-bottom-left-radius: 50%
+            - border-bottom-right-radius: 40%
+            - background: |
+                [[[
+                  if (states[variables.purificatore].state == 'on')
+                    return "LightSteelBlue";
+                  return 'none';
+                ]]]
+            - animation: spin 5s reverse infinite
+
+    pm2:
+      card:
+        type: custom:button-card
+        show_icon: false
+        show_name: false
+        styles:
+          card:
+            - height: 150px
+            - width: 150px
+            - background-color: "#333333"
+            - border-radius: 50%
+            - border: 2px solid
+    pm2_b:
+      card:
+        type: custom:button-card
+        entity: >
+          [[[ return 'sensor.airq_' + variables.nome ]]]
+        show_icon: false
+        show_name: false
+        show_state: true
+        styles:
+          card:
+            - height: 130px
+            - width: 130px
+            - background-color: "#f2f2f7"
+            - border-radius: 50%
+            - border: 2px solid Gray
+          state:
+            - font-size: 18px
+            - color: DimGray
+            - font-weight: bold
+            - padding: 70px 0px 0px 0px
+
+    logo_aria:
+      card:
+        type: "custom:button-card"
+        extra_styles: |
+          @keyframes fade_green {
+            from {transform:rotate(0deg);}
+            to {transform:rotate(360deg);}
+            0%   {color: #669900; width: 45px; height: 45px; opacity: 0.7; }
+            25%  {color: #4c8000; width: 35px; height: 35px; opacity: 0.8; }
+            50%  {color: #336600; width: 25px; height: 25px; opacity: 0.9; }
+            75%  {color: #4c8000; width: 35px; height: 35px; opacity: 0.8; }
+            100% {color: #669900; width: 45px; height: 45px; opacity: 0.7; }
+          }
+          @keyframes fade_orange {
+            from {transform:rotate(0deg);}
+            to {transform:rotate(360deg);}
+            0%   {color: #FF8C00; width: 45px; height: 45px; opacity: 0.7; }
+            25%  {color: #DAA520; width: 35px; height: 35px; opacity: 0.8; }
+            50%  {color: #FFA500; width: 25px; height: 25px; opacity: 0.9; }
+            75%  {color: #DAA520; width: 35px; height: 35px; opacity: 0.8; }
+            100% {color: #FF8C00; width: 45px; height: 45px; opacity: 0.7; }
+          }
+          @keyframes fade_red {
+            from {transform:rotate(0deg);}
+            to {transform:rotate(360deg);}
+            0%   {color: #B22222; width: 45px; height: 45px; opacity: 0.7; }
+            25%  {color: #800000; width: 35px; height: 35px; opacity: 0.8; }
+            50%  {color: #FF4500; width: 25px; height: 25px; opacity: 0.9; }
+            75%  {color: #800000; width: 35px; height: 35px; opacity: 0.8; }
+            100% {color: #B22222; width: 45px; height: 45px; opacity: 0.7; }
+          }
+        template: no_background
+        show_name: false
+        icon: mdi:square-rounded-outline
+        size: 100%
+        styles:
+          card:
+            - height: 50px
+            - width: 50px
+          icon:
+            - color: |
+                [[[
+                  if (states['sensor.purificatore_aria_' + variables.nome].state == 'Buona') return 'green';
+                  else if (states['sensor.purificatore_aria_' + variables.nome].state == 'Media') return 'orange';
+                  else if (states['sensor.purificatore_aria_' + variables.nome].state == 'Cattiva') return 'red';
+                  else return 'Gray';
+                ]]]
+            - animation: |
+                [[[
+                  if (states['sensor.purificatore_aria_' + variables.nome].state == 'Buona') return "fade_green 3s reverse infinite";
+                  else if (states['sensor.purificatore_aria_' + variables.nome].state == 'Media') return "fade_orange 3s reverse infinite";
+                  else if (states['sensor.purificatore_aria_' + variables.nome].state == 'Cattiva') return "fade_red 3s reverse infinite";
+                  else return "none";
+                ]]]
+    logo_aria2:
+      card:
+        type: "custom:button-card"
+        extra_styles: |
+          @keyframes fade_green {
+            from {transform:rotate(0deg);}
+            to {transform:rotate(360deg);}
+            0%   {color: #669900; width: 45px; height: 45px; opacity: 0.7; }
+            25%  {color: #4c8000; width: 35px; height: 35px; opacity: 0.8; }
+            50%  {color: #336600; width: 25px; height: 25px; opacity: 0.9; }
+            75%  {color: #4c8000; width: 35px; height: 35px; opacity: 0.8; }
+            100% {color: #669900; width: 45px; height: 45px; opacity: 0.7; }
+          }
+          @keyframes fade_orange {
+            from {transform:rotate(0deg);}
+            to {transform:rotate(360deg);}
+            0%   {color: #FF8C00; width: 45px; height: 45px; opacity: 0.7; }
+            25%  {color: #DAA520; width: 35px; height: 35px; opacity: 0.8; }
+            50%  {color: #FFA500; width: 25px; height: 25px; opacity: 0.9; }
+            75%  {color: #DAA520; width: 35px; height: 35px; opacity: 0.8; }
+            100% {color: #FF8C00; width: 45px; height: 45px; opacity: 0.7; }
+          }
+          @keyframes fade_red {
+            from {transform:rotate(0deg);}
+            to {transform:rotate(360deg);}
+            0%   {color: #B22222; width: 45px; height: 45px; opacity: 0.7; }
+            25%  {color: #800000; width: 35px; height: 35px; opacity: 0.8; }
+            50%  {color: #FF4500; width: 25px; height: 25px; opacity: 0.9; }
+            75%  {color: #800000; width: 35px; height: 35px; opacity: 0.8; }
+            100% {color: #B22222; width: 45px; height: 45px; opacity: 0.7; }
+          }
+        template: no_background
+        show_name: false
+        icon: mdi:circle-outline
+        size: 100%
+        styles:
+          card:
+            - height: 40px
+            - width: 40px
+          icon:
+            - color: |
+                [[[
+                  if (states['sensor.purificatore_aria_' + variables.nome].state == 'Buona') return 'green';
+                  else if (states['sensor.purificatore_aria_' + variables.nome].state == 'Media') return 'orange';
+                  else if (states['sensor.purificatore_aria_' + variables.nome].state == 'Cattiva') return 'red';
+                  else return 'Gray';
+                ]]]
+            - animation: |
+                [[[
+                  if (states['sensor.purificatore_aria_' + variables.nome].state == 'Buona') return "fade_green 3s reverse infinite";
+                  else if (states['sensor.purificatore_aria_' + variables.nome].state == 'Media') return "fade_orange 3s reverse infinite";
+                  else if (states['sensor.purificatore_aria_' + variables.nome].state == 'Cattiva') return "fade_red 3s reverse infinite";
+                  else return "none";
+                ]]]
+    logo_aria3:
+      card:
+        type: "custom:button-card"
+        extra_styles: |
+          @keyframes fade_green {
+            from {transform:rotate(0deg);}
+            to {transform:rotate(360deg);}
+            0%   {color: #669900; width: 45px; height: 45px; opacity: 0.7; }
+            25%  {color: #4c8000; width: 35px; height: 35px; opacity: 0.8; }
+            50%  {color: #336600; width: 25px; height: 25px; opacity: 0.9; }
+            75%  {color: #4c8000; width: 35px; height: 35px; opacity: 0.8; }
+            100% {color: #669900; width: 45px; height: 45px; opacity: 0.7; }
+          }
+          @keyframes fade_orange {
+            from {transform:rotate(0deg);}
+            to {transform:rotate(360deg);}
+            0%   {color: #FF8C00; width: 45px; height: 45px; opacity: 0.7; }
+            25%  {color: #DAA520; width: 35px; height: 35px; opacity: 0.8; }
+            50%  {color: #FFA500; width: 25px; height: 25px; opacity: 0.9; }
+            75%  {color: #DAA520; width: 35px; height: 35px; opacity: 0.8; }
+            100% {color: #FF8C00; width: 45px; height: 45px; opacity: 0.7; }
+          }
+          @keyframes fade_red {
+            from {transform:rotate(0deg);}
+            to {transform:rotate(360deg);}
+            0%   {color: #B22222; width: 45px; height: 45px; opacity: 0.7; }
+            25%  {color: #800000; width: 35px; height: 35px; opacity: 0.8; }
+            50%  {color: #FF4500; width: 25px; height: 25px; opacity: 0.9; }
+            75%  {color: #800000; width: 35px; height: 35px; opacity: 0.8; }
+            100% {color: #B22222; width: 45px; height: 45px; opacity: 0.7; }
+          }
+        template: no_background
+        show_name: false
+        icon: mdi:circle-outline
+        size: 100%
+        styles:
+          card:
+            - height: 50px
+            - width: 50px
+          icon:
+            - color: |
+                [[[
+                  if (states['sensor.purificatore_aria_' + variables.nome].state == 'Buona') return 'green';
+                  else if (states['sensor.purificatore_aria_' + variables.nome].state == 'Media') return 'orange';
+                  else if (states['sensor.purificatore_aria_' + variables.nome].state == 'Cattiva') return 'red';
+                  else return 'Gray';
+                ]]]
+            - animation: |
+                [[[
+                  if (states['sensor.purificatore_aria_' + variables.nome].state == 'Buona') return "fade_green 3s reverse infinite";
+                  else if (states['sensor.purificatore_aria_' + variables.nome].state == 'Media') return "fade_orange 3s reverse infinite";
+                  else if (states['sensor.purificatore_aria_' + variables.nome].state == 'Cattiva') return "fade_red 3s reverse infinite";
+                  else return "none";
+                ]]]
+    logo_aria4:
+      card:
+        type: "custom:button-card"
+        extra_styles: |
+          @keyframes fade_green {
+            from {transform:rotate(0deg);}
+            to {transform:rotate(360deg);}
+            0%   {color: #669900; width: 45px; height: 45px; opacity: 0.7; }
+            25%  {color: #4c8000; width: 35px; height: 35px; opacity: 0.8; }
+            50%  {color: #336600; width: 25px; height: 25px; opacity: 0.9; }
+            75%  {color: #4c8000; width: 35px; height: 35px; opacity: 0.8; }
+            100% {color: #669900; width: 45px; height: 45px; opacity: 0.7; }
+          }
+          @keyframes fade_orange {
+            from {transform:rotate(0deg);}
+            to {transform:rotate(360deg);}
+            0%   {color: #FF8C00; width: 45px; height: 45px; opacity: 0.7; }
+            25%  {color: #DAA520; width: 35px; height: 35px; opacity: 0.8; }
+            50%  {color: #FFA500; width: 25px; height: 25px; opacity: 0.9; }
+            75%  {color: #DAA520; width: 35px; height: 35px; opacity: 0.8; }
+            100% {color: #FF8C00; width: 45px; height: 45px; opacity: 0.7; }
+          }
+          @keyframes fade_red {
+            from {transform:rotate(0deg);}
+            to {transform:rotate(360deg);}
+            0%   {color: #B22222; width: 45px; height: 45px; opacity: 0.7; }
+            25%  {color: #800000; width: 35px; height: 35px; opacity: 0.8; }
+            50%  {color: #FF4500; width: 25px; height: 25px; opacity: 0.9; }
+            75%  {color: #800000; width: 35px; height: 35px; opacity: 0.8; }
+            100% {color: #B22222; width: 45px; height: 45px; opacity: 0.7; }
+          }
+        template: no_background
+        show_name: false
+        icon: mdi:circle-outline
+        size: 100%
+        styles:
+          card:
+            - height: 50px
+            - width: 50px
+          icon:
+            - color: |
+                [[[
+                  if (states['sensor.purificatore_aria_' + variables.nome].state == 'Buona') return 'green';
+                  else if (states['sensor.purificatore_aria_' + variables.nome].state == 'Media') return 'orange';
+                  else if (states['sensor.purificatore_aria_' + variables.nome].state == 'Cattiva') return 'red';
+                  else return 'Gray';
+                ]]]
+            - animation: |
+                [[[
+                  if (states['sensor.purificatore_aria_' + variables.nome].state == 'Buona') return "fade_green 3s reverse infinite";
+                  else if (states['sensor.purificatore_aria_' + variables.nome].state == 'Media') return "fade_orange 3s reverse infinite";
+                  else if (states['sensor.purificatore_aria_' + variables.nome].state == 'Cattiva') return "fade_red 3s reverse infinite";
+                  else return "none";
+                ]]]
+
+    impostazioni:
+      card:
+        type: "custom:button-card"
+        template: no_background
+        show_name: false
+        icon: mdi:cog
+        size: 100%
+        styles:
+          card:
+            - height: 50px
+            - width: 50px
+
+        tap_action:
+          action: fire-dom-event
+          browser_mod:
+            service: browser_mod.popup
+            data:
+              card_mod:
+                style:
+                  .: |
+                    :host {
+                      --mdc-dialog-scrim-color: rgba(10,10,10,0.9);
+                      --mdc-dialog-min-height: 0%;
+                      --mdc-dialog-min-width: 10px;
+                      --mdc-dialog-max-width: 110px;
+                    }
+              content:
+                type: vertical-stack
+                cards:
+                  - type: entities
+                    title: Impostazioni
+                    show_header_toggle: false
+                    entities:
+
+                      - type: "custom:button-card"
+                        color_type: blank-card
+                        styles:
+                          card:
+                            - width: 500px
+
+                      - entity: "[[[ return 'input_boolean.purificatore_' + variables.nome + '_auto']]]"
+                        name: Gestione Automatica
+                        icon: mdi:refresh-auto
+                        
+                      - entity: "[[[ return 'input_boolean.purificatore_' + variables.nome + '_auto_off']]]"
+                        type: custom:multiple-entity-row
+                        name: Blocco automatico
+                        toggle: true
+                        state_color: true
+                        entities:
+                          - entity: "[[[ return 'input_datetime.purificatore_' + variables.nome + '_auto_on']]]"
+                            name: Inizio lavoro
+                          - entity: "[[[ return 'input_datetime.purificatore_' + variables.nome + '_auto_off']]]"
+                            name: Stop lavoro
+
+                      - entity: "[[[ return 'input_boolean.purificatore_' + variables.nome + '_modo_notte']]]"
+                        type: custom:multiple-entity-row
+                        name: Modalità Notte
+                        toggle: true
+                        state_color: true
+                        entities:
+                          - entity: "[[[ return 'input_datetime.purificatore_' + variables.nome + '_notte_on']]]"
+                            name: Inizio lavoro
+                          - entity: "[[[ return 'input_datetime.purificatore_' + variables.nome + '_notte_off']]]"
+                            name: Stop lavoro
+
+
+    graph:
+      card:
+        type: custom:apexcharts-card
+        layout: minimal
+        cache: true
+        graph_span: 8h
+        experimental:
+          brush: false
+        apex_config:
+          chart:
+            width: 120px
+            height: 80px
+        series:
+          - entity: "[[[ return variables.sensore ]]]"
+            color: steelBlue
+            opacity: 0.6
+            stroke_width: 2
+            fill_raw: last
+            curve: stepline
+            type: area
+            show:
+              extremas: false
+            group_by:
+              duration: 10min
+              func: avg
+        style: |
+          ha-card {
+            --ha-card-background: "rgba(0, 0, 0, 0.0)";
+            border: 0px;
+          }
+
+    auto:
+      card:
+        type: custom:button-card
+        template: no_background
+        icon: mdi:refresh-auto
+        show_name: false
+        size: 100%
+        entity: >
+          [[[ return 'input_boolean.purificatore_' + variables.nome + '_auto' ]]]
+        state:
+          - value: 'on'
+            styles:
+              icon:
+                - color: "#2c8be5"
+          - value: 'off'
+            styles:
+              icon:
+                - color: Gray
+        styles:
+          card:
+            - height: 50px
+            - width: 50px
+    nome:
+      card:
+        type: custom:button-card
+        name: "[[[ return variables.titolo ]]]"
+        styles:
+          card:
+            - height: 40px
+            - width: 160px
+            - background: none
+            - border: none
+          name:
+            - font-size: 24px
+            - font-weight: bold
+            # - justify-self: start
+
+    fan_switch:
+      card:
+        type: custom:button-card
+        show_name: false
+        icon: |
+          [[[
+            if (states[variables.purificatore].state == 'off') return 'mdi:power';
+            else if (states['input_boolean.purificatore_' + variables.nome + '_icona_auto'].state == 'on' && states['counter.purificatore_' + variables.nome ].state == '1') return 'mdi:fan-speed-1';
+            else if (states['input_boolean.purificatore_' + variables.nome + '_icona_auto'].state == 'on' && states['counter.purificatore_' + variables.nome ].state == '2') return 'mdi:fan-speed-2';
+            else if (states['input_boolean.purificatore_' + variables.nome + '_icona_auto'].state == 'on' && states['counter.purificatore_' + variables.nome ].state == '3') return 'mdi:fan-speed-3';
+            else if (states['input_boolean.purificatore_' + variables.nome + '_icona_auto'].state == 'off' && states[variables.purificatore].state == 'on') return 'mdi:fan-auto';
+          ]]]
+        size: 96%
+        styles:
+          card:
+            - height: 50px
+            - width: 50px
+            - background: none
+            - border: none
+          icon:
+            - color: |
+                [[[
+                  if (states[variables.purificatore].state == 'on') return "#6495ED";
+                ]]]
+
+        tap_action:
+          action: call-service
+          service: "[[[ return 'script.incremento_couter_purifictore_' + variables.nome ]]]"
+          service_data:
+            purificatore: "[[[ return 'purificatore_' + variables.nome ]]]"
+
+        hold_action:
+          action: call-service
+          service: >
+            [[[
+              if (states[variables.purificatore].state == 'on') return 'script.purificatore_aria_' + variables.nome + '_off';
+              if (states[variables.purificatore].state == 'off') return 'script.purificatore_aria_' + variables.nome + '_1';
+            ]]]
+    notte:
+      card:
+        type: "custom:button-card"
+        template: no_background
+        show_name: false
+        color: |
+          [[[
+            if (states['input_boolean.purificatore_' + variables.nome + '_modo_notte'].state == 'on') return 'DodgerBlue';
+            else if (states['input_boolean.purificatore_' + variables.nome + '_modo_notte'].state == 'on' && states['input_boolean.purificatore_' + variables.nome + '_auto_off'].state == 'on') return 'DodgerBlue';
+            else if (states['input_boolean.purificatore_' + variables.nome + '_modo_notte'].state == 'off' && states['input_boolean.purificatore_' + variables.nome + '_auto_off'].state == 'on') return 'Gray';
+            else if (states['input_boolean.purificatore_' + variables.nome + '_modo_notte'].state == 'off' && states['input_boolean.purificatore_' + variables.nome + '_auto_off'].state == 'off') return '#eeb51f';
+          ]]]
+        icon: |
+          [[[
+            if (states['input_boolean.purificatore_' + variables.nome + '_modo_notte'].state == 'on') return 'mdi:weather-night';
+            else if (states['input_boolean.purificatore_' + variables.nome + '_modo_notte'].state == 'on' && states['input_boolean.purificatore_' + variables.nome + '_auto_off'].state == 'on') return 'mdi:fan-off';
+            else if (states['input_boolean.purificatore_' + variables.nome + '_modo_notte'].state == 'off' && states['input_boolean.purificatore_' + variables.nome + '_auto_off'].state == 'on') return 'mdi:fan-off';
+            else if (states['input_boolean.purificatore_' + variables.nome + '_modo_notte'].state == 'off' && states['input_boolean.purificatore_' + variables.nome + '_auto_off'].state == 'off') return 'mdi:white-balance-sunny';
+          ]]]
+        size: 100%
+        styles:
+          card:
+            - height: 50px
+            - width: 50px
+        tap_action:
+          action: call-service
+          service: "[[[ return 'script.purificatore_aria_' + variables.nome + '_toggle']]]"
