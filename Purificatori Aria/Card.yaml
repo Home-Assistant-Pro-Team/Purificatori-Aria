@@ -1,0 +1,11 @@
+type: custom:stack-in-card
+cards:
+  - type: custom:button-card
+    template: card_purificatori
+    triggers_update: all
+    variables:
+      titolo: Cucina
+      nome: cucina
+      purificatore: fan.purificatore_cucina
+      sensore: sensor.airq_cucina
+      step: sensor.purificatore_aria_cucina_step
