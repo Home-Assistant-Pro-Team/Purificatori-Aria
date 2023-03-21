@@ -1,0 +1,395 @@
+# Sostituire le entità seguenti:
+
+# - sensor.airq_soggiorno (sensore qualità dell'aria)
+# - fan.purificatore_soggiorno (entità del purificatore)
+# - sensor.time (sensore dell'ora)
+
+# Se cambiare le nomenclature ricordatevi di cambiare anche nella card
+
+
+
+homeassistant:
+##############################################################################
+##                  INPUT_BOOLEAN
+################################################
+input_boolean:
+  purificatore_soggiorno_auto:
+    name: Purificatore soggiorno Auto
+    icon: mdi:progress-clock
+  purificatore_soggiorno_auto_off:
+    name: Purificatore soggiorno auto off
+    icon: mdi:fan-off
+  purificatore_soggiorno_modo_notte:
+    name: Purificatore soggiorno modalità notte
+    icon: mdi:weather-night
+  purificatore_soggiorno_icona_auto:
+    name: Purificatore soggiorno icona
+
+##############################################################################
+##                  INPUT_BOOLEAN
+################################################
+input_datetime:
+  purificatore_soggiorno_auto_on:
+    name: Purificatore soggiorno Auto on
+    has_date: false
+    has_time: true
+  purificatore_soggiorno_auto_off:
+    name: Purificatore soggiorno Auto off
+    has_date: false
+    has_time: true
+
+  purificatore_soggiorno_notte_on:
+    name: Purificatore soggiorno notte on
+    has_date: false
+    has_time: true
+  purificatore_soggiorno_notte_off:
+    name: Purificatore soggiorno notte off
+    has_date: false
+    has_time: true
+
+##############################################################################
+##                  INPUT_BOOLEAN
+################################################
+counter:
+  purificatore_soggiorno:
+    initial: 1
+    step: 1
+    restore: true
+    maximum: 4
+    minimum: 1
+
+template:
+################################################################################
+##                  Sensor
+################################################
+  - sensor:
+      - name: Purificatore Aria soggiorno
+        unique_id: purificatore_aria_soggiorno
+        state: >-
+          {%if states('sensor.airq_soggiorno') |int <= 35 %}
+            Buona
+          {% elif states('sensor.airq_soggiorno') |int > 35 and states('sensor.airq_soggiorno') |int <= 65 %}
+            Media
+          {% elif states('sensor.airq_soggiorno') |int > 65 %}
+            Cattiva
+          {% else %}
+            Errore
+          {% endif %}
+
+      - name: Purificatore Aria soggiorno Step
+        unique_id: purificatore_aria_soggiorno_step
+        state: >-
+          {{ state_attr('fan.purificatore_soggiorno', 'percentage_step')|int |default(33)  }}
+
+################################################################################
+##                  Script
+###################################################
+script:
+  purificatore_aria_soggiorno_off:
+    alias: "Purificatore Aria soggiorno OFF"
+    sequence:
+      - service: fan.turn_off
+        target:
+          entity_id: fan.purificatore_soggiorno
+      - service: switch.turn_off
+        target:
+          entity_id: switch.purificatore_soggiorno_display
+      - service: input_boolean.turn_off
+        target:
+          entity_id: input_boolean.purificatore_soggiorno_icona_auto
+
+  purificatore_aria_soggiorno_1:
+    alias: "Purificatore Aria soggiorno 1"
+    sequence:
+      - service: number.set_value
+        data:
+          value: 1
+        target:
+          entity_id: number.purificatore_soggiorno_fan_speed_level
+      - service: switch.turn_off
+        target:
+          entity_id: switch.purificatore_soggiorno_display
+      - service: input_boolean.turn_on
+        target:
+          entity_id: input_boolean.purificatore_soggiorno_icona_auto
+
+  purificatore_aria_soggiorno_2:
+    alias: "Purificatore Aria soggiorno 2"
+    sequence:
+      - service: number.set_value
+        data:
+          value: 2
+        target:
+          entity_id: number.purificatore_soggiorno_fan_speed_level
+      - service: switch.turn_off
+        target:
+          entity_id: switch.purificatore_soggiorno_display
+      - service: input_boolean.turn_on
+        target:
+          entity_id: input_boolean.purificatore_soggiorno_icona_auto
+
+  purificatore_aria_soggiorno_3:
+    alias: "Purificatore Aria soggiorno 3"
+    sequence:
+      - service: number.set_value
+        data:
+          value: 3
+        target:
+          entity_id: number.purificatore_soggiorno_fan_speed_level
+      - service: switch.turn_off
+        target:
+          entity_id: switch.purificatore_soggiorno_display
+      - service: input_boolean.turn_on
+        target:
+          entity_id: input_boolean.purificatore_soggiorno_icona_auto
+
+  incremento_couter_purifictore_soggiorno:
+    alias: "Incremento counter Purificatore soggiorno"
+    mode: parallel
+    sequence:
+      - choose:
+          - conditions:
+              - condition: state
+                entity_id: fan.purificatore_soggiorno
+                state: 'on'
+            sequence:
+              - service: counter.increment
+                target:
+                  entity_id: counter.{{ purificatore }}
+      - choose:
+          - conditions:
+              - condition: state
+                entity_id: fan.purificatore_soggiorno
+                state: 'off'
+            sequence:
+              - service: counter.reset
+                target:
+                  entity_id: counter.{{ purificatore }}
+              - service: fan.turn_on
+                target:
+                  entity_id: fan.purificatore_soggiorno
+              - service: number.set_value
+                data:
+                  value: 1
+                target:
+                  entity_id: number.purificatore_soggiorno_fan_speed_level
+
+              - service: switch.turn_off
+                target:
+                  entity_id: switch.purificatore_soggiorno_display
+
+              - service: input_boolean.turn_on
+                target:
+                  entity_id: input_boolean.purificatore_soggiorno_icona_auto
+
+  purificatore_aria_soggiorno_toggle:
+    alias: "Purificatore Aria Soggiorno Toggle"
+    sequence:
+      - service: input_boolean.toggle
+        target:
+          entity_id:
+            - input_boolean.purificatore_soggiorno_modo_notte
+            - input_boolean.purificatore_soggiorno_auto_off
+
+################################################################################
+##                  Automation
+###################################################
+automation:
+  - alias: "Purificatore Aria soggiorno auto off"
+    id: 114d09e50c5b1a26dc286be0d87b6ec2
+    initial_state: true
+    trigger:
+      - platform: time
+        at: input_datetime.purificatore_soggiorno_auto_on
+      - platform: time
+        at: input_datetime.purificatore_soggiorno_auto_off
+    action:
+      - choose:
+          - alias: "OFF"
+            conditions:
+              - condition: template
+                value_template: "{{states('sensor.time') == states('input_datetime.purificatore_soggiorno_auto_off') [0:5] }}"
+            sequence:
+              - service: input_boolean.turn_on
+                target:
+                  entity_id: input_boolean.purificatore_soggiorno_auto_off
+
+          - alias: "ON"
+            conditions:
+              - condition: template
+                value_template: "{{states('sensor.time') == states('input_datetime.purificatore_soggiorno_auto_on') [0:5] }}"
+            sequence:
+              - service: input_boolean.turn_off
+                target:
+                  entity_id: input_boolean.purificatore_soggiorno_auto_off
+
+  - alias: "Purificatore Aria soggiorno modo notte"
+    id: 8f8f5b69-7046-4f1c-ada1-7a6f9411fcac
+    initial_state: true
+    trigger:
+      - platform: time
+        at: input_datetime.purificatore_soggiorno_notte_on
+      - platform: time
+        at: input_datetime.purificatore_soggiorno_notte_off
+    action:
+      - choose:
+          - alias: "OFF"
+            conditions:
+              - condition: template
+                value_template: "{{states('sensor.time') == states('input_datetime.purificatore_soggiorno_notte_off') [0:5] }}"
+            sequence:
+              - service: input_boolean.turn_off
+                target:
+                  entity_id: input_boolean.purificatore_soggiorno_modo_notte
+
+          - alias: "ON"
+            conditions:
+              - condition: template
+                value_template: "{{states('sensor.time') == states('input_datetime.purificatore_soggiorno_notte_on') [0:5] }}"
+            sequence:
+              - service: input_boolean.turn_on
+                target:
+                  entity_id: input_boolean.purificatore_soggiorno_modo_notte
+
+  - alias: "Purificatore Aria soggiorno"
+    id: 4287564c4a3f89d6212feb43fa4616c6
+    initial_state: true
+    mode: restart
+    trigger:
+
+      - id: "piano_m"
+        platform: state
+        entity_id: counter.purificatore_soggiorno
+        to: "1"
+        for:
+          milliseconds: 500
+
+      - id: "medio"
+        platform: state
+        entity_id: sensor.purificatore_aria_soggiorno
+        to: "Media"
+        for:
+          seconds: 10
+
+      - id: "medio_m"
+        platform: state
+        entity_id: counter.purificatore_soggiorno
+        to: "2"
+        for:
+          milliseconds: 500
+
+      - id: "forte"
+        platform: state
+        entity_id: sensor.purificatore_aria_soggiorno
+        to: "Cattiva"
+
+      - id: "forte_m"
+        platform: state
+        entity_id: counter.purificatore_soggiorno
+        to: "3"
+        for:
+          milliseconds: 500
+
+      - id: "spento"
+        platform: time
+        at: "22:59:00"
+
+      - id: "spento"
+        platform: state
+        entity_id: group.famiglia
+        to: "not_home"
+
+      - id: "spento"
+        platform: state
+        entity_id: sensor.purificatore_aria_soggiorno
+        to: "Buona"
+        for:
+          seconds: 30
+
+    condition:
+      - condition: state
+        entity_id: input_boolean.purificatore_soggiorno_auto
+        state: "on"
+    action:
+      - choose:
+          - conditions: # SPENTO
+              - alias: "SPENTO"
+                condition: trigger
+                id: "spento"
+            sequence:
+              - service: script.turn_on
+                target:
+                  entity_id: script.purificatore_aria_soggiorno_off
+              - service: input_boolean.turn_off
+                target:
+                  entity_id: input_boolean.purificatore_soggiorno_icona_auto
+
+          - conditions: # PIANO M
+              - alias: "PIANO M"
+                condition: trigger
+                id: "piano_m"
+            sequence:
+              - service: script.turn_on
+                target:
+                  entity_id: script.purificatore_aria_soggiorno_1
+
+
+          - conditions: # MEDIO
+              - alias: "MEDIO"
+                condition: trigger
+                id: "medio"
+              - condition: time
+                after: input_datetime.purificatore_soggiorno_auto_on
+                before: input_datetime.purificatore_soggiorno_auto_off
+              - condition: state
+                entity_id: group.famiglia
+                state: "home"
+            sequence:
+              - service: script.turn_on
+                target:
+                  entity_id: script.purificatore_aria_soggiorno_2
+
+          - conditions: # MEDIO_M
+              - alias: "MEDIO M"
+                condition: trigger
+                id: "medio_m"
+            sequence:
+              - service: script.turn_on
+                target:
+                  entity_id: script.purificatore_aria_soggiorno_2
+
+          - conditions: # FORTE
+              - alias: "FORTE"
+                condition: trigger
+                id: "forte"
+              - condition: time
+                after: input_datetime.purificatore_soggiorno_auto_on
+                before: input_datetime.purificatore_soggiorno_auto_off
+              - condition: state
+                entity_id: group.famiglia
+                state: "home"
+            sequence:
+              - service: script.turn_on
+                target:
+                  entity_id: script.purificatore_aria_soggiorno_3
+
+          - conditions: # FORTE M
+              - alias: "FORTE M"
+                condition: trigger
+                id: "forte_m"
+            sequence:
+              - service: script.turn_on
+                target:
+                  entity_id: script.purificatore_aria_soggiorno_3
+
+  - alias: "Reset counter Purificatore Soggiorno"
+    id: a3eb5331e308efaa93bb6696fca87eb9
+    initial_state: true
+    trigger:
+      - platform: state
+        entity_id: counter.purificatore_soggiorno
+        to: "4"
+    action:
+      - service: counter.reset
+        target:
+          entity_id: counter.purificatore_soggiorno
