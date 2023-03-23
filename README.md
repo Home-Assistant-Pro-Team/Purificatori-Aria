@@ -8,7 +8,9 @@ Le funzioni sono:
 - Gestione assenza (se non si è in casa non entra in funzione
 - Indicazione in tempo reale della qualità dell'aria
 
-https://user-images.githubusercontent.com/48358142/226631241-cba5fad0-7bce-4606-a133-21116b8e77f1.mp4
+
+https://user-images.githubusercontent.com/48358142/227190539-9850685d-5426-47ec-b8c3-b50a901468e9.mp4
+
 
 # Per il funzionamento della card bisogna avere:
 - Custom Button Card 
