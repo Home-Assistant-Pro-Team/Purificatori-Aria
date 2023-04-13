@@ -735,8 +735,11 @@ card_purificatori:
           service: >
             [[[
               if (states[variables.purificatore].state == 'on') return 'script.purificatore_aria_' + variables.nome + '_off';
-              if (states[variables.purificatore].state == 'off') return 'script.purificatore_aria_' + variables.nome + '_1';
+              if (states[variables.purificatore].state == 'off') return 'script.purificatore_aria_' + variables.nome ;
             ]]]
+          service_data:
+            value: 1
+
     notte:
       card:
         type: "custom:button-card"
@@ -818,4 +821,3 @@ logo_purificatore:
     }
 
 # manca template background
-# cambiare template in logo_purificatore
