@@ -1,4 +1,5 @@
 card_purificatori:
+  
   template: no_background
   show_icon: false
   styles:
@@ -173,7 +174,7 @@ card_purificatori:
         type: custom:button-card
         name: Aria
         label: |
-          [[[ return states['sensor.purificatore_aria_' + variables.nome].state ]]]
+          [[[ return states[variables.sensore].state ]]]
         show_label: true
         styles:
           card:
@@ -538,219 +539,32 @@ card_purificatori:
     logo_aria:
       card:
         type: "custom:button-card"
-        extra_styles: |
-          @keyframes fade_green {
-            from {transform:rotate(0deg);}
-            to {transform:rotate(360deg);}
-            0%   {color: #669900; width: 45px; height: 45px; opacity: 0.7; }
-            25%  {color: #4c8000; width: 35px; height: 35px; opacity: 0.8; }
-            50%  {color: #336600; width: 25px; height: 25px; opacity: 0.9; }
-            75%  {color: #4c8000; width: 35px; height: 35px; opacity: 0.8; }
-            100% {color: #669900; width: 45px; height: 45px; opacity: 0.7; }
-          }
-          @keyframes fade_orange {
-            from {transform:rotate(0deg);}
-            to {transform:rotate(360deg);}
-            0%   {color: #FF8C00; width: 45px; height: 45px; opacity: 0.7; }
-            25%  {color: #DAA520; width: 35px; height: 35px; opacity: 0.8; }
-            50%  {color: #FFA500; width: 25px; height: 25px; opacity: 0.9; }
-            75%  {color: #DAA520; width: 35px; height: 35px; opacity: 0.8; }
-            100% {color: #FF8C00; width: 45px; height: 45px; opacity: 0.7; }
-          }
-          @keyframes fade_red {
-            from {transform:rotate(0deg);}
-            to {transform:rotate(360deg);}
-            0%   {color: #B22222; width: 45px; height: 45px; opacity: 0.7; }
-            25%  {color: #800000; width: 35px; height: 35px; opacity: 0.8; }
-            50%  {color: #FF4500; width: 25px; height: 25px; opacity: 0.9; }
-            75%  {color: #800000; width: 35px; height: 35px; opacity: 0.8; }
-            100% {color: #B22222; width: 45px; height: 45px; opacity: 0.7; }
-          }
-        template: no_background
-        show_name: false
-        icon: mdi:square-rounded-outline
-        size: 100%
-        styles:
-          card:
-            - height: 50px
-            - width: 50px
-          icon:
-            - color: |
-                [[[
-                  if (states['sensor.purificatore_aria_' + variables.nome].state == 'Buona') return 'green';
-                  else if (states['sensor.purificatore_aria_' + variables.nome].state == 'Media') return 'orange';
-                  else if (states['sensor.purificatore_aria_' + variables.nome].state == 'Cattiva') return 'red';
-                  else return 'Gray';
-                ]]]
-            - animation: |
-                [[[
-                  if (states['sensor.purificatore_aria_' + variables.nome].state == 'Buona') return "fade_green 3s reverse infinite";
-                  else if (states['sensor.purificatore_aria_' + variables.nome].state == 'Media') return "fade_orange 3s reverse infinite";
-                  else if (states['sensor.purificatore_aria_' + variables.nome].state == 'Cattiva') return "fade_red 3s reverse infinite";
-                  else return "none";
-                ]]]
+        template: 
+          - no_background
+          - logo_purificatore
     logo_aria2:
       card:
         type: "custom:button-card"
-        extra_styles: |
-          @keyframes fade_green {
-            from {transform:rotate(0deg);}
-            to {transform:rotate(360deg);}
-            0%   {color: #669900; width: 45px; height: 45px; opacity: 0.7; }
-            25%  {color: #4c8000; width: 35px; height: 35px; opacity: 0.8; }
-            50%  {color: #336600; width: 25px; height: 25px; opacity: 0.9; }
-            75%  {color: #4c8000; width: 35px; height: 35px; opacity: 0.8; }
-            100% {color: #669900; width: 45px; height: 45px; opacity: 0.7; }
-          }
-          @keyframes fade_orange {
-            from {transform:rotate(0deg);}
-            to {transform:rotate(360deg);}
-            0%   {color: #FF8C00; width: 45px; height: 45px; opacity: 0.7; }
-            25%  {color: #DAA520; width: 35px; height: 35px; opacity: 0.8; }
-            50%  {color: #FFA500; width: 25px; height: 25px; opacity: 0.9; }
-            75%  {color: #DAA520; width: 35px; height: 35px; opacity: 0.8; }
-            100% {color: #FF8C00; width: 45px; height: 45px; opacity: 0.7; }
-          }
-          @keyframes fade_red {
-            from {transform:rotate(0deg);}
-            to {transform:rotate(360deg);}
-            0%   {color: #B22222; width: 45px; height: 45px; opacity: 0.7; }
-            25%  {color: #800000; width: 35px; height: 35px; opacity: 0.8; }
-            50%  {color: #FF4500; width: 25px; height: 25px; opacity: 0.9; }
-            75%  {color: #800000; width: 35px; height: 35px; opacity: 0.8; }
-            100% {color: #B22222; width: 45px; height: 45px; opacity: 0.7; }
-          }
-        template: no_background
-        show_name: false
-        icon: mdi:circle-outline
-        size: 100%
+        template: 
+          - no_background
+          - logo_purificatore
         styles:
           card:
             - height: 40px
             - width: 40px
-          icon:
-            - color: |
-                [[[
-                  if (states['sensor.purificatore_aria_' + variables.nome].state == 'Buona') return 'green';
-                  else if (states['sensor.purificatore_aria_' + variables.nome].state == 'Media') return 'orange';
-                  else if (states['sensor.purificatore_aria_' + variables.nome].state == 'Cattiva') return 'red';
-                  else return 'Gray';
-                ]]]
-            - animation: |
-                [[[
-                  if (states['sensor.purificatore_aria_' + variables.nome].state == 'Buona') return "fade_green 3s reverse infinite";
-                  else if (states['sensor.purificatore_aria_' + variables.nome].state == 'Media') return "fade_orange 3s reverse infinite";
-                  else if (states['sensor.purificatore_aria_' + variables.nome].state == 'Cattiva') return "fade_red 3s reverse infinite";
-                  else return "none";
-                ]]]
     logo_aria3:
       card:
         type: "custom:button-card"
-        extra_styles: |
-          @keyframes fade_green {
-            from {transform:rotate(0deg);}
-            to {transform:rotate(360deg);}
-            0%   {color: #669900; width: 45px; height: 45px; opacity: 0.7; }
-            25%  {color: #4c8000; width: 35px; height: 35px; opacity: 0.8; }
-            50%  {color: #336600; width: 25px; height: 25px; opacity: 0.9; }
-            75%  {color: #4c8000; width: 35px; height: 35px; opacity: 0.8; }
-            100% {color: #669900; width: 45px; height: 45px; opacity: 0.7; }
-          }
-          @keyframes fade_orange {
-            from {transform:rotate(0deg);}
-            to {transform:rotate(360deg);}
-            0%   {color: #FF8C00; width: 45px; height: 45px; opacity: 0.7; }
-            25%  {color: #DAA520; width: 35px; height: 35px; opacity: 0.8; }
-            50%  {color: #FFA500; width: 25px; height: 25px; opacity: 0.9; }
-            75%  {color: #DAA520; width: 35px; height: 35px; opacity: 0.8; }
-            100% {color: #FF8C00; width: 45px; height: 45px; opacity: 0.7; }
-          }
-          @keyframes fade_red {
-            from {transform:rotate(0deg);}
-            to {transform:rotate(360deg);}
-            0%   {color: #B22222; width: 45px; height: 45px; opacity: 0.7; }
-            25%  {color: #800000; width: 35px; height: 35px; opacity: 0.8; }
-            50%  {color: #FF4500; width: 25px; height: 25px; opacity: 0.9; }
-            75%  {color: #800000; width: 35px; height: 35px; opacity: 0.8; }
-            100% {color: #B22222; width: 45px; height: 45px; opacity: 0.7; }
-          }
-        template: no_background
-        show_name: false
-        icon: mdi:circle-outline
-        size: 100%
-        styles:
-          card:
-            - height: 50px
-            - width: 50px
-          icon:
-            - color: |
-                [[[
-                  if (states['sensor.purificatore_aria_' + variables.nome].state == 'Buona') return 'green';
-                  else if (states['sensor.purificatore_aria_' + variables.nome].state == 'Media') return 'orange';
-                  else if (states['sensor.purificatore_aria_' + variables.nome].state == 'Cattiva') return 'red';
-                  else return 'Gray';
-                ]]]
-            - animation: |
-                [[[
-                  if (states['sensor.purificatore_aria_' + variables.nome].state == 'Buona') return "fade_green 3s reverse infinite";
-                  else if (states['sensor.purificatore_aria_' + variables.nome].state == 'Media') return "fade_orange 3s reverse infinite";
-                  else if (states['sensor.purificatore_aria_' + variables.nome].state == 'Cattiva') return "fade_red 3s reverse infinite";
-                  else return "none";
-                ]]]
+        template: 
+          - no_background
+          - logo_purificatore
     logo_aria4:
       card:
         type: "custom:button-card"
-        extra_styles: |
-          @keyframes fade_green {
-            from {transform:rotate(0deg);}
-            to {transform:rotate(360deg);}
-            0%   {color: #669900; width: 45px; height: 45px; opacity: 0.7; }
-            25%  {color: #4c8000; width: 35px; height: 35px; opacity: 0.8; }
-            50%  {color: #336600; width: 25px; height: 25px; opacity: 0.9; }
-            75%  {color: #4c8000; width: 35px; height: 35px; opacity: 0.8; }
-            100% {color: #669900; width: 45px; height: 45px; opacity: 0.7; }
-          }
-          @keyframes fade_orange {
-            from {transform:rotate(0deg);}
-            to {transform:rotate(360deg);}
-            0%   {color: #FF8C00; width: 45px; height: 45px; opacity: 0.7; }
-            25%  {color: #DAA520; width: 35px; height: 35px; opacity: 0.8; }
-            50%  {color: #FFA500; width: 25px; height: 25px; opacity: 0.9; }
-            75%  {color: #DAA520; width: 35px; height: 35px; opacity: 0.8; }
-            100% {color: #FF8C00; width: 45px; height: 45px; opacity: 0.7; }
-          }
-          @keyframes fade_red {
-            from {transform:rotate(0deg);}
-            to {transform:rotate(360deg);}
-            0%   {color: #B22222; width: 45px; height: 45px; opacity: 0.7; }
-            25%  {color: #800000; width: 35px; height: 35px; opacity: 0.8; }
-            50%  {color: #FF4500; width: 25px; height: 25px; opacity: 0.9; }
-            75%  {color: #800000; width: 35px; height: 35px; opacity: 0.8; }
-            100% {color: #B22222; width: 45px; height: 45px; opacity: 0.7; }
-          }
-        template: no_background
-        show_name: false
-        icon: mdi:circle-outline
-        size: 100%
-        styles:
-          card:
-            - height: 50px
-            - width: 50px
-          icon:
-            - color: |
-                [[[
-                  if (states['sensor.purificatore_aria_' + variables.nome].state == 'Buona') return 'green';
-                  else if (states['sensor.purificatore_aria_' + variables.nome].state == 'Media') return 'orange';
-                  else if (states['sensor.purificatore_aria_' + variables.nome].state == 'Cattiva') return 'red';
-                  else return 'Gray';
-                ]]]
-            - animation: |
-                [[[
-                  if (states['sensor.purificatore_aria_' + variables.nome].state == 'Buona') return "fade_green 3s reverse infinite";
-                  else if (states['sensor.purificatore_aria_' + variables.nome].state == 'Media') return "fade_orange 3s reverse infinite";
-                  else if (states['sensor.purificatore_aria_' + variables.nome].state == 'Cattiva') return "fade_red 3s reverse infinite";
-                  else return "none";
-                ]]]
+        template: 
+          - no_background
+          - logo_purificatore
+
 
     impostazioni:
       card:
@@ -911,13 +725,11 @@ card_purificatori:
                 [[[
                   if (states[variables.purificatore].state == 'on') return "#6495ED";
                 ]]]
-
         tap_action:
           action: call-service
           service: "[[[ return 'script.incremento_couter_purifictore_' + variables.nome ]]]"
           service_data:
             purificatore: "[[[ return 'purificatore_' + variables.nome ]]]"
-
         hold_action:
           action: call-service
           service: >
@@ -952,3 +764,58 @@ card_purificatori:
         tap_action:
           action: call-service
           service: "[[[ return 'script.purificatore_aria_' + variables.nome + '_toggle']]]"
+
+logo_purificatore:
+  show_name: false
+  icon: mdi:circle-outline
+  size: 100%
+  styles:
+    card:
+      - height: 50px
+      - width: 50px
+    icon:
+      - color: |
+          [[[
+            if (states[variables.sensore].state <= 35 ) return 'green';
+            else if (states[variables.sensore].state > 35 && states[variables.sensore].state <= 65) return 'orange';
+            else if (states[variables.sensore].state > 65) return 'red';
+            else return 'Gray';
+          ]]]
+      - animation: |
+          [[[
+            if (states[variables.sensore].state  <= 35 ) return "fade_green 3s reverse infinite";
+            else if (states[variables.sensore].state > 35 && states[variables.sensore].state <= 65) return "fade_orange 3s reverse infinite";
+            else if (states[variables.sensore].state > 65) return "fade_red 3s reverse infinite";
+            else return "none";
+          ]]]
+  extra_styles: |
+    @keyframes fade_green {
+      from {transform:rotate(0deg);}
+      to {transform:rotate(360deg);}
+      0%   {color: #669900; width: 45px; height: 45px; opacity: 0.7; }
+      25%  {color: #4c8000; width: 35px; height: 35px; opacity: 0.8; }
+      50%  {color: #336600; width: 25px; height: 25px; opacity: 0.9; }
+      75%  {color: #4c8000; width: 35px; height: 35px; opacity: 0.8; }
+      100% {color: #669900; width: 45px; height: 45px; opacity: 0.7; }
+    }
+    @keyframes fade_orange {
+      from {transform:rotate(0deg);}
+      to {transform:rotate(360deg);}
+      0%   {color: #FF8C00; width: 45px; height: 45px; opacity: 0.7; }
+      25%  {color: #DAA520; width: 35px; height: 35px; opacity: 0.8; }
+      50%  {color: #FFA500; width: 25px; height: 25px; opacity: 0.9; }
+      75%  {color: #DAA520; width: 35px; height: 35px; opacity: 0.8; }
+      100% {color: #FF8C00; width: 45px; height: 45px; opacity: 0.7; }
+    }
+    @keyframes fade_red {
+      from {transform:rotate(0deg);}
+      to {transform:rotate(360deg);}
+      0%   {color: #B22222; width: 45px; height: 45px; opacity: 0.7; }
+      25%  {color: #800000; width: 35px; height: 35px; opacity: 0.8; }
+      50%  {color: #FF4500; width: 25px; height: 25px; opacity: 0.9; }
+      75%  {color: #800000; width: 35px; height: 35px; opacity: 0.8; }
+      100% {color: #B22222; width: 45px; height: 45px; opacity: 0.7; }
+    }
+
+# manca template background
+# cambiare template in logo_purificatore

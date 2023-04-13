@@ -1,14 +1,17 @@
+homeassistant:
+  customize:
+    package.node_anchors:
+        entità del purificatore:    &fan    fan.purificatore_soggiorno
+
+
 # Sostituire le entità seguenti:
 
-# - sensor.airq_soggiorno (sensore qualità dell'aria)
-# - fan.purificatore_soggiorno (entità del purificatore)
-# - sensor.time (sensore dell'ora)
+# - sensor.airq_soggiorno (sensore qualità dell'aria) nel template sensor: Purificatore Aria soggiorno
+# - fan.purificatore_soggiorno (entità del purificatore) nel template sensor: Purificatore Aria soggiorno Step
 
 # Se cambiare le nomenclature ricordatevi di cambiare anche nella card
 
 
-
-homeassistant:
 ##############################################################################
 ##                  INPUT_BOOLEAN
 ################################################
@@ -63,14 +66,15 @@ template:
 ##                  Sensor
 ################################################
   - sensor:
-      - name: Purificatore Aria soggiorno
+      - name: Purificatore Aria soggiorno   # da togliere trigger automazione 
         unique_id: purificatore_aria_soggiorno
         state: >-
-          {%if states('sensor.airq_soggiorno') |int <= 35 %}
+          {% set airq = 'sensor.airq_soggiorno'}
+          {%if states(airq) |int <= 35 %}
             Buona
-          {% elif states('sensor.airq_soggiorno') |int > 35 and states('sensor.airq_soggiorno') |int <= 65 %}
+          {% elif states(airq) |int > 35 and states(airq) |int <= 65 %}
             Media
-          {% elif states('sensor.airq_soggiorno') |int > 65 %}
+          {% elif states(airq) |int > 65 %}
             Cattiva
           {% else %}
             Errore
@@ -87,10 +91,12 @@ template:
 script:
   purificatore_aria_soggiorno_off:
     alias: "Purificatore Aria soggiorno OFF"
+    variables: 
+      fan: *fan
     sequence:
       - service: fan.turn_off
         target:
-          entity_id: fan.purificatore_soggiorno
+          entity_id: "{{fan}}"
       - service: switch.turn_off
         target:
           entity_id: switch.purificatore_soggiorno_display
@@ -146,11 +152,13 @@ script:
   incremento_couter_purifictore_soggiorno:
     alias: "Incremento counter Purificatore soggiorno"
     mode: parallel
+    variables: 
+      fan: *fan
     sequence:
       - choose:
           - conditions:
               - condition: state
-                entity_id: fan.purificatore_soggiorno
+                entity_id: "{{fan}}"
                 state: 'on'
             sequence:
               - service: counter.increment
@@ -159,7 +167,7 @@ script:
       - choose:
           - conditions:
               - condition: state
-                entity_id: fan.purificatore_soggiorno
+                entity_id: "{{fan}}"
                 state: 'off'
             sequence:
               - service: counter.reset
@@ -167,7 +175,7 @@ script:
                   entity_id: counter.{{ purificatore }}
               - service: fan.turn_on
                 target:
-                  entity_id: fan.purificatore_soggiorno
+                  entity_id: "{{fan}}"
               - service: number.set_value
                 data:
                   value: 1
@@ -208,7 +216,7 @@ automation:
           - alias: "OFF"
             conditions:
               - condition: template
-                value_template: "{{states('sensor.time') == states('input_datetime.purificatore_soggiorno_auto_off') [0:5] }}"
+                value_template: "{{now().strftime('%H:%M') == states('input_datetime.purificatore_soggiorno_auto_off') [0:5] }}"
             sequence:
               - service: input_boolean.turn_on
                 target:
@@ -217,7 +225,7 @@ automation:
           - alias: "ON"
             conditions:
               - condition: template
-                value_template: "{{states('sensor.time') == states('input_datetime.purificatore_soggiorno_auto_on') [0:5] }}"
+                value_template: "{{now().strftime('%H:%M') == states('input_datetime.purificatore_soggiorno_auto_on') [0:5] }}"
             sequence:
               - service: input_boolean.turn_off
                 target:
@@ -236,7 +244,7 @@ automation:
           - alias: "OFF"
             conditions:
               - condition: template
-                value_template: "{{states('sensor.time') == states('input_datetime.purificatore_soggiorno_notte_off') [0:5] }}"
+                value_template: "{{now().strftime('%H:%M') == states('input_datetime.purificatore_soggiorno_notte_off') [0:5] }}"
             sequence:
               - service: input_boolean.turn_off
                 target:
@@ -245,7 +253,7 @@ automation:
           - alias: "ON"
             conditions:
               - condition: template
-                value_template: "{{states('sensor.time') == states('input_datetime.purificatore_soggiorno_notte_on') [0:5] }}"
+                value_template: "{{now().strftime('%H:%M') == states('input_datetime.purificatore_soggiorno_notte_on') [0:5] }}"
             sequence:
               - service: input_boolean.turn_on
                 target:
