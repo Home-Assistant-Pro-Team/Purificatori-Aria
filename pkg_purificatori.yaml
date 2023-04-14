@@ -55,18 +55,6 @@ counter:
     maximum: 4
     minimum: 1
 
-template:
-################################################################################
-##                  Sensor
-################################################
-  - sensor:
-
-  #NON USATO?
-      # - name: Purificatore Aria soggiorno Step
-      #   unique_id: purificatore_aria_soggiorno_step
-      #   state: >-
-      #     {{ state_attr('fan.purificatore_soggiorno', 'percentage_step')|int |default(33)  }}
-
 ################################################################################
 ##                  Script
 ###################################################
@@ -307,7 +295,7 @@ automation:
                     data: 
                       value: '{{trigger.to_state.state|int(0)}}'
 
-          - conditions: # SPENTO
+          - conditions: # SPENTO per not_home er orario
               - alias: "SPENTO"
                 condition: trigger
                 id: "spento"
