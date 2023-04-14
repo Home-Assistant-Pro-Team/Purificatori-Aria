@@ -8,4 +8,4 @@ cards:
       nome: cucina
       purificatore: fan.purificatore_cucina
       sensore: sensor.airq_cucina
-      step: sensor.purificatore_aria_cucina_step
+      #step: sensor.purificatore_aria_cucina_step non usato

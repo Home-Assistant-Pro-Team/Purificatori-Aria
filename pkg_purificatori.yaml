@@ -3,16 +3,8 @@ homeassistant:
     package.node_anchors:
         entità del purificatore:    &fan    fan.purificatore_soggiorno
         sensor.airq_soggiorno:      &airq   sensor.airq_soggiorno
-      # group.famiglia
-
-
-# Sostituire le entità seguenti:
-
-# - sensor.airq_soggiorno (sensore qualità dell'aria) nel template sensor: Purificatore Aria soggiorno
-# - fan.purificatore_soggiorno (entità del purificatore) nel template sensor: Purificatore Aria soggiorno Step
-
-# Se cambiare le nomenclature ricordatevi di cambiare anche nella card
-
+        display:                    &display  switch.purificatore_soggiorno_display
+        group.famiglia:             &family    group.famiglia
 
 ##############################################################################
 ##                  INPUT_BOOLEAN
@@ -31,7 +23,7 @@ input_boolean:
     name: Purificatore soggiorno icona
 
 ##############################################################################
-##                  INPUT_BOOLEAN
+##                  input_datetime
 ################################################
 input_datetime:
   purificatore_soggiorno_auto_on:
@@ -53,7 +45,7 @@ input_datetime:
     has_time: true
 
 ##############################################################################
-##                  INPUT_BOOLEAN
+##                  counter
 ################################################
 counter:
   purificatore_soggiorno:
@@ -69,11 +61,11 @@ template:
 ################################################
   - sensor:
 
-
-      - name: Purificatore Aria soggiorno Step
-        unique_id: purificatore_aria_soggiorno_step
-        state: >-
-          {{ state_attr('fan.purificatore_soggiorno', 'percentage_step')|int |default(33)  }}
+  #NON USATO?
+      # - name: Purificatore Aria soggiorno Step
+      #   unique_id: purificatore_aria_soggiorno_step
+      #   state: >-
+      #     {{ state_attr('fan.purificatore_soggiorno', 'percentage_step')|int |default(33)  }}
 
 ################################################################################
 ##                  Script
@@ -83,13 +75,14 @@ script:
     alias: "Purificatore Aria soggiorno OFF"
     variables: 
       fan: *fan
+      display: *display
     sequence:
       - service: fan.turn_off
         target:
           entity_id: "{{fan}}"
       - service: switch.turn_off
         target:
-          entity_id: switch.purificatore_soggiorno_display
+          entity_id: '{{display}}'
       - service: input_boolean.turn_off
         target:
           entity_id: input_boolean.purificatore_soggiorno_icona_auto
@@ -98,6 +91,7 @@ script:
     alias: "Purificatore Aria soggiorno"
     variables: 
       value: 1
+      display: *display
     sequence:
       - service: number.set_value
         data:
@@ -106,7 +100,7 @@ script:
           entity_id: number.purificatore_soggiorno_fan_speed_level
       - service: switch.turn_off
         target:
-          entity_id: switch.purificatore_soggiorno_display
+          entity_id: '{{display}}'
       - service: input_boolean.turn_on
         target:
           entity_id: input_boolean.purificatore_soggiorno_icona_auto
@@ -116,6 +110,7 @@ script:
     mode: parallel
     variables: 
       fan: *fan
+      display: *display
     sequence:
       - if:
           
@@ -125,11 +120,11 @@ script:
         then:
               - service: counter.increment
                 target:
-                  entity_id: counter.{{ purificatore }}
+                  entity_id: counter.{{ purificatore }} #??
         else:
               - service: counter.reset
                 target:
-                  entity_id: counter.{{ purificatore }}
+                  entity_id: counter.{{ purificatore }} #??
               - service: fan.turn_on
                 target:
                   entity_id: "{{fan}}"
@@ -141,7 +136,7 @@ script:
 
               - service: switch.turn_off
                 target:
-                  entity_id: switch.purificatore_soggiorno_display
+                  entity_id: '{{display}}'
 
               - service: input_boolean.turn_on
                 target:
@@ -224,24 +219,9 @@ automation:
       airq: *airq
     trigger:
 
-      - id: "piano_m"
+      - id: "test2"
         platform: state
         entity_id: counter.purificatore_soggiorno
-        to: "1"
-        for:
-          milliseconds: 500
-
-      - id: "medio_m"
-        platform: state
-        entity_id: counter.purificatore_soggiorno
-        to: "2"
-        for:
-          milliseconds: 500
-
-      - id: "forte_m"
-        platform: state
-        entity_id: counter.purificatore_soggiorno
-        to: "3"
         for:
           milliseconds: 500
 
@@ -251,7 +231,8 @@ automation:
 
       - id: "spento"
         platform: state
-        entity_id: group.famiglia
+        entity_id: *family
+        from: 'home'
         to: "not_home"
 
       - id: TEST
@@ -289,7 +270,7 @@ automation:
                     after: input_datetime.purificatore_soggiorno_auto_on
                     before: input_datetime.purificatore_soggiorno_auto_off
                   - condition: state
-                    entity_id: group.famiglia
+                    entity_id: *family
                     state: "home"
                 sequence:
                   - choose:
@@ -312,24 +293,19 @@ automation:
                             data: 
                               value: 3
 
-          - conditions: # PIANO M
-              - alias: "PIANO M"
-                condition: trigger
-                id: "piano_m"
+          - alias: MEDIO_M, FORTE M, PIANO M, reset  counter
+            conditions: 
+              - "{{trigger.id == 'test2'}}"
             sequence:
-              - service: script.purificatore_aria_soggiorno
-                data: 
-                  value: 1
-
-
-          - conditions: # MEDIO_M
-              - alias: "MEDIO M"
-                condition: trigger
-                id: "medio_m"
-            sequence:
-              - service: script.purificatore_aria_soggiorno
-                data: 
-                  value: 2
+              - if: '{{trigger.to_state.state == "4"}}'
+                then:
+                  - service: counter.reset
+                    target:
+                      entity_id: counter.purificatore_soggiorno
+                else:
+                  - service: script.purificatore_aria_soggiorno
+                    data: 
+                      value: '{{trigger.to_state.state|int(0)}}'
 
           - conditions: # SPENTO
               - alias: "SPENTO"
@@ -342,23 +318,3 @@ automation:
               - service: input_boolean.turn_off
                 target:
                   entity_id: input_boolean.purificatore_soggiorno_icona_auto
-          - conditions: # FORTE M
-              - alias: "FORTE M"
-                condition: trigger
-                id: "forte_m"
-            sequence:
-              - service: script.purificatore_aria_soggiorno
-                data: 
-                  value: 3
-
-  - alias: "Reset counter Purificatore Soggiorno"
-    id: a3eb5331e308efaa93bb6696fca87eb9
-    initial_state: true
-    trigger:
-      - platform: state
-        entity_id: counter.purificatore_soggiorno
-        to: "4"
-    action:
-      - service: counter.reset
-        target:
-          entity_id: counter.purificatore_soggiorno
