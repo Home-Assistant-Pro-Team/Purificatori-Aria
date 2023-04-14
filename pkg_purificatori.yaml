@@ -226,17 +226,14 @@ automation:
       - id: TEST
         platform: state
         entity_id: *airq
-
-
-    condition:
-      - condition: state
-        entity_id: input_boolean.purificatore_soggiorno_auto
-        state: "on"
     action:
 
       - choose:
           - alias: test
             conditions: 
+              - condition: state
+                entity_id: input_boolean.purificatore_soggiorno_auto
+                state: "on"
               - "{{trigger.id == 'TEST'}}"
             sequence:
             - choose:
@@ -291,11 +288,17 @@ automation:
                     target:
                       entity_id: counter.purificatore_soggiorno
                 else:
+                  - condition: state
+                    entity_id: input_boolean.purificatore_soggiorno_auto
+                    state: "on"
                   - service: script.purificatore_aria_soggiorno
                     data: 
                       value: '{{trigger.to_state.state|int(0)}}'
 
           - conditions: # SPENTO per not_home er orario
+              - condition: state
+                entity_id: input_boolean.purificatore_soggiorno_auto
+                state: "on"
               - alias: "SPENTO"
                 condition: trigger
                 id: "spento"
