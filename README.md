@@ -1,4 +1,5 @@
 # Card di gestione dei purificatori d'aria.
+# A breve ci saranno aggiornamenti card: miglioramenti e correzioni bug non scaricarla ora
 per la realizazzione del pacchetto ho usato purificatori levoit ma con pochi sforzi è adattabile a qualsiasi tipo di purificatore
 
 Le funzioni sono: 
